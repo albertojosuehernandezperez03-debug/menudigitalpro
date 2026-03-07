@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forno Rosso — Menú Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400;1,700&family=Barlow:wght@300;400;500&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:   #0A0603;
+      --dark:    #150C06;
+      --dark2:   #1E1108;
+      --red:     #A0241A;
+      --red2:    #C0362A;
+      --orange:  #C96A1A;
+      --cream:   #F5ECD7;
+      --bone:    #E8D9BF;
+      --gray:    rgba(245,236,215,0.45);
+      --border:  rgba(160,36,26,0.22);
+      --border2: rgba(255,255,255,0.06);
+    }
+    html { scroll-behavior: smooth; background: var(--black); }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black); color: var(--cream);
+      max-width: 520px; margin: 0 auto; min-height: 100vh;
+    }
+    @media (min-width: 800px) {
+      html { padding: 2rem 0; }
+      body { border-radius: 14px; overflow-y: auto !important; box-shadow: 0 0 80px rgba(160,36,26,0.12); }
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--dark);
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-flames {
+      position: absolute; inset: 0; opacity: 0.03;
+      background: radial-gradient(ellipse at 30% 80%, #C96A1A 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, #A0241A 0%, transparent 50%);
+    }
+    .header-pattern {
+      position: absolute; inset: 0; opacity: 0.025;
+      background-image: repeating-linear-gradient(45deg, var(--cream) 0, var(--cream) 1px, transparent 0, transparent 50%);
+      background-size: 8px 8px;
+    }
+    .header-inner {
+      position: relative; z-index: 1;
+      padding: 2.5rem 1.5rem 2rem; text-align: center;
+    }
+    .header-logo {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--black); border: 2px solid var(--border);
+      margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 0 30px rgba(160,36,26,0.15), inset 0 0 20px rgba(201,106,26,0.05);
+    }
+    .header-ornament {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.6rem; margin-bottom: 0.8rem;
+    }
+    .orn-line { height: 1px; width: 35px; background: linear-gradient(90deg, transparent, var(--red)); }
+    .orn-line.r { background: linear-gradient(90deg, var(--red), transparent); }
+    .orn-dot { width: 4px; height: 4px; background: var(--red); border-radius: 50%; }
+    .header-name {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 2.2rem; color: var(--cream); font-weight: 700;
+      letter-spacing: 0.06em; margin-bottom: 0.2rem;
+    }
+    .header-sub {
+      font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 0.5rem; font-weight: 400;
+    }
+    .header-tagline {
+      font-family: 'Bodoni Moda', serif; font-style: italic;
+      font-size: 0.78rem; color: rgba(245,236,215,0.35); margin-bottom: 0.8rem;
+    }
+    .header-info {
+      display: flex; justify-content: center; gap: 1.5rem;
+      font-size: 0.68rem; color: var(--gray); flex-wrap: wrap; font-weight: 300;
+    }
+
+    /* BANNER */
+    .banner {
+      background: var(--red); color: var(--cream);
+      padding: 0.55rem 1.5rem; text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    }
+
+    /* CATS */
+    .cats-wrapper {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--dark2); border-bottom: 1px solid var(--border);
+    }
+    .cats-scroll { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .cats-scroll::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      padding: 0.9rem 1.1rem; border: none; background: transparent; cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 600;
+      color: rgba(245,236,215,0.35); white-space: nowrap;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border-bottom: 2px solid transparent; transition: all 0.2s; flex-shrink: 0;
+    }
+    .cat-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+    .cat-btn:hover { color: var(--cream); }
+
+    /* SEARCH */
+    .search-bar {
+      padding: 0.65rem 1.2rem;
+      background: var(--dark2); border-bottom: 1px solid var(--border2);
+    }
+    .search-input {
+      width: 100%; padding: 0.55rem 1rem 0.55rem 2.2rem;
+      border: 1px solid var(--border); border-radius: 1px;
+      font-family: 'Barlow', sans-serif; font-size: 0.8rem;
+      background: var(--black); color: var(--cream); outline: none;
+      transition: border-color 0.2s; font-weight: 300;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='%23C0362A' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: 0.65rem center;
+    }
+    .search-input:focus { border-color: var(--red); }
+    .search-input::placeholder { color: rgba(245,236,215,0.2); }
+
+    /* FEATURED */
+    .featured {
+      margin: 0.9rem 1.2rem;
+      border: 1px solid var(--border); border-left: 3px solid var(--red);
+      background: linear-gradient(135deg, var(--dark), var(--dark2));
+      padding: 1.1rem; display: flex; align-items: center; gap: 1rem;
+      position: relative; overflow: hidden;
+    }
+    .featured::after {
+      content: '🍕'; position: absolute; right: -5px; bottom: -10px;
+      font-size: 5rem; opacity: 0.05; transform: rotate(-20deg);
+    }
+    .feat-emoji { font-size: 2.5rem; flex-shrink: 0; }
+    .feat-info { flex: 1; }
+    .feat-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.2rem; }
+    .feat-name { font-family: 'Bodoni Moda', serif; font-size: 1rem; color: var(--cream); margin-bottom: 0.2rem; }
+    .feat-desc { font-size: 0.72rem; color: var(--gray); }
+    .feat-price { font-family: 'Bodoni Moda', serif; font-size: 1.4rem; color: var(--orange); flex-shrink: 0; }
+
+    /* CONTENT */
+    .content { padding: 0 0 6rem; }
+
+    /* SECTION HEADER */
+    .section-header {
+      padding: 1.8rem 1.2rem 0.8rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .sh-left { flex: 1; }
+    .sh-label { font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red2); margin-bottom: 0.2rem; font-weight: 400; }
+    .sh-name { font-family: 'Bodoni Moda', serif; font-size: 1.25rem; color: var(--cream); font-weight: 700; }
+    .sh-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+    .sh-count { font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(245,236,215,0.22); }
+
+    /* SIZE PILLS */
+    .size-row { display: flex; gap: 0.4rem; margin-bottom: 0.4rem; flex-wrap: wrap; }
+    .size-pill {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.12rem 0.55rem; border: 1px solid var(--border2);
+      color: rgba(245,236,215,0.4); background: transparent;
+    }
+
+    /* ITEMS */
+    .items-list { padding: 0 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.5rem; }
+    .item-card {
+      background: var(--dark2); border: 1px solid var(--border2);
+      display: flex; align-items: stretch; cursor: pointer; overflow: hidden;
+      transition: border-color 0.25s, transform 0.2s; position: relative;
+    }
+    .item-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--red); transform: scaleY(0); transform-origin: bottom; transition: transform 0.3s;
+    }
+    .item-card:hover { border-color: var(--border); transform: translateX(3px); }
+    .item-card:hover::before { transform: scaleY(1); }
+    .item-emoji {
+      width: 82px; min-height: 90px; flex-shrink: 0;
+      background: var(--dark); display: flex; align-items: center;
+      justify-content: center; font-size: 2.2rem;
+      border-right: 1px solid var(--border2);
+    }
+    .item-body { padding: 0.85rem 0.9rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .item-name { font-family: 'Bodoni Moda', serif; font-size: 0.95rem; color: var(--cream); margin-bottom: 0.12rem; }
+    .item-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.3rem; }
+    .badge { font-size: 0.54rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.1rem 0.5rem; border: 1px solid; font-weight: 600; }
+    .b-sig  { color: var(--orange); border-color: rgba(201,106,26,0.3); background: rgba(201,106,26,0.06); }
+    .b-new  { color: #A5D6A7; border-color: rgba(165,214,167,0.3); background: rgba(165,214,167,0.06); }
+    .b-pop  { color: var(--gray); border-color: var(--border2); }
+    .b-veg  { color: #81C784; border-color: rgba(129,199,132,0.3); background: rgba(129,199,132,0.06); }
+    .b-hot  { color: #FF8A65; border-color: rgba(255,138,101,0.3); background: rgba(255,138,101,0.06); }
+    .item-desc { font-size: 0.72rem; color: var(--gray); line-height: 1.55; margin-bottom: 0.5rem; font-weight: 300; }
+
+    /* PRICES ROW */
+    .prices-row { display: flex; align-items: center; justify-content: space-between; }
+    .prices-group { display: flex; gap: 1rem; align-items: baseline; }
+    .price-item { text-align: center; }
+    .price-size { font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,236,215,0.3); margin-bottom: 0.1rem; }
+    .price-val { font-family: 'Bodoni Moda', serif; font-size: 0.92rem; color: var(--orange); }
+    .price-val.main { font-size: 1.05rem; }
+    .add-btn {
+      width: 28px; height: 28px; background: transparent;
+      border: 1px solid var(--border); color: var(--red2); font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .add-btn:hover { background: var(--red); color: white; border-color: var(--red); }
+
+    /* DIVIDER */
+    .section-divider {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.3rem 1.2rem; margin: 0.3rem 0;
+    }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+    .section-divider span { color: var(--red); font-size: 0.6rem; letter-spacing: 0.2em; }
+
+    /* CART */
+    .cart-bar {
+      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      background: var(--red); color: white;
+      padding: 0.85rem 1.8rem; display: flex; align-items: center; gap: 1rem;
+      box-shadow: 0 8px 30px rgba(160,36,26,0.4); cursor: pointer; z-index: 100;
+      min-width: 260px; justify-content: space-between;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 1px;
+    }
+    .cart-bar.visible { opacity: 1; pointer-events: all; }
+    .cart-count { background: white; color: var(--red); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; }
+    .cart-total { font-family: 'Bodoni Moda', serif; font-size: 1rem; }
+
+    /* INFO FOOTER */
+    .info-footer { background: var(--dark); padding: 2rem 1.5rem; border-top: 1px solid var(--border); }
+    .info-ornament { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; }
+    .info-ornament::before, .info-ornament::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .info-ornament span { font-family: 'Bodoni Moda', serif; font-size: 0.8rem; color: var(--orange); font-style: italic; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .info-item { padding: 0.8rem; border: 1px solid var(--border2); background: var(--black); }
+    .info-label { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.3rem; }
+    .info-value { font-size: 0.78rem; color: rgba(245,236,215,0.55); line-height: 1.55; font-weight: 300; }
+    .powered-by { text-align: center; padding: 0.8rem; font-size: 0.65rem; color: rgba(245,236,215,0.2); background: var(--black); border-top: 1px solid var(--border2); }
+    .powered-by span { color: var(--orange); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--dark2); width: 100%; border-top: 2px solid var(--red); padding: 1.8rem 1.5rem 1.5rem; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.32,0.72,0,1); max-height: 82vh; overflow-y: auto; position: relative; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-handle { width: 32px; height: 2px; background: var(--border2); margin: 0 auto 1.2rem; }
+    .modal-emoji { font-size: 3rem; text-align: center; margin-bottom: 0.8rem; }
+    .modal-name { font-family: 'Bodoni Moda', serif; font-size: 1.5rem; text-align: center; color: var(--cream); font-weight: 700; margin-bottom: 0.3rem; }
+    .modal-tag { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange); text-align: center; margin-bottom: 0.8rem; }
+    .modal-desc { font-size: 0.82rem; color: var(--gray); text-align: center; line-height: 1.75; margin-bottom: 1.2rem; font-weight: 300; }
+    .modal-price { font-family: 'Bodoni Moda', serif; font-size: 1.8rem; color: var(--orange); text-align: center; margin-bottom: 1.5rem; }
+    .modal-btn { width: 100%; background: var(--red); color: white; border: none; padding: 1rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; font-weight: 700; }
+    .modal-btn:hover { background: var(--red2); }
+    .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; background: transparent; border: 1px solid var(--border2); color: rgba(245,236,215,0.4); width: 28px; height: 28px; cursor: pointer; font-size: 0.82rem; transition: all 0.2s; }
+    .modal-close:hover { border-color: var(--red); color: var(--cream); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-flames"></div>
+    <div class="header-pattern"></div>
+    <div class="header-inner">
+      <div class="header-ornament">
+        <div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line r"></div>
+      </div>
+      <div class="header-logo">🍕</div>
+      <div class="header-name">Forno Rosso</div>
+      <div class="header-sub">Pizzería Artesanal · Horno de Leña</div>
+      <div class="header-tagline">"Masa madre, ingredientes frescos, tradición italiana"</div>
+      <div class="header-info">
+        <span>⏰ 11am – 10pm</span>
+        <span>📍 San José, CR</span>
+        <span>⭐ 4.9</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner">🔥 Pizzas al horno de leña — Masa fermentada 48 horas</div>
+
+  <div class="cats-wrapper">
+    <div class="cats-scroll">
+      <button class="cat-btn active" onclick="goToSection(this,'pizzas')">🍕 Pizzas</button>
+      <button class="cat-btn" onclick="goToSection(this,'calzone')">🫓 Calzone</button>
+      <button class="cat-btn" onclick="goToSection(this,'entradas')">🥗 Entradas</button>
+      <button class="cat-btn" onclick="goToSection(this,'pastas')">🍝 Pastas</button>
+      <button class="cat-btn" onclick="goToSection(this,'bebidas')">🥤 Bebidas</button>
+      <button class="cat-btn" onclick="goToSection(this,'postres')">🍮 Postres</button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input class="search-input" type="text" placeholder="Buscar en el menú..." oninput="searchMenu(this.value)"/>
+  </div>
+
+  <div class="featured">
+    <div class="feat-emoji">🍕</div>
+    <div class="feat-info">
+      <div class="feat-tag">✦ Especialidad del chef</div>
+      <div class="feat-name">Pizza Tartufo Nero</div>
+      <div class="feat-desc">Trufa negra, mozzarella fior di latte, prosciutto</div>
+    </div>
+    <div class="feat-price">₡8.900</div>
+  </div>
+
+  <div class="content">
+
+    <!-- PIZZAS -->
+    <div id="pizzas">
+      <div class="section-header">
+        <div class="sh-left">
+          <div class="sh-label">Horno de leña · Masa madre 48h</div>
+          <div class="sh-name">Pizzas Artesanales</div>
+        </div>
+        <div class="sh-line"></div>
+        <div class="sh-count">6 opciones</div>
+      </div>
+      <div class="items-list">
+
+        <div class="item-card" onclick="openModal('Margherita','La clásica napolitana. Salsa de tomate San Marzano, mozzarella fior di latte, albahaca fresca y aceite de oliva extra virgen.','🍕','₡6.500')">
+          <div class="item-emoji">🍕</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Margherita</div>
+              <div class="item-badges"><span class="badge b-veg">🌿 Vegetariana</span><span class="badge b-pop">Clásica</span></div>
+              <div class="item-desc">Tomate San Marzano, mozzarella fior di latte y albahaca fresca.</div>
+            </div>
+            <div class="prices-row">
+              <div class="prices-group">
+                <div class="price-item"><div class="price-size">Personal</div><div class="price-val">₡6.500</div></div>
+                <div class="price-item"><div class="price-size">Mediana</div><div class="price-val">₡9.200</div></div>
+                <div class="price-item"><div class="price-size">Grande</div><div class="price-val">₡11.800</div></div>
+              </div>
+              <button class="add-btn" onclick="addToCart(event,'Margherita',6500)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Pepperoni Suprema','Generosa capa de pepperoni americano, mozzarella extra, orégano y salsa de tomate casera.','🍕','₡7.200')">
+          <div class="item-emoji">🍕</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Pepperoni Suprema</div>
+              <div class="item-badges"><span class="badge b-pop">La más pedida</span></div>
+              <div class="item-desc">Pepperoni americano, mozzarella extra, orégano y salsa casera.</div>
+            </div>
+            <div class="prices-row">
+              <div class="prices-group">
+                <div class="price-item"><div class="price-size">Personal</div><div class="price-val">₡7.200</div></div>
+                <div class="price-item"><div class="price-size">Mediana</div><div class="price-val">₡10.500</div></div>
+                <div class="price-item"><div class="price-size">Grande</div><div class="price-val">₡13.200</div></div>
+              </div>
+              <button class="add-btn" onclick="addToCart(event,'Pepperoni Suprema',7200)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Tartufo Nero','Trufa negra laminada, mozzarella fior di latte, prosciutto di Parma y aceite de trufa. La joya de la casa.','🍕','₡8.900')">
+          <div class="item-emoji">🍕</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Tartufo Nero</div>
+              <div class="item-badges"><span class="badge b-sig">Especialidad</span><span class="badge b-new">Premium</span></div>
+              <div class="item-desc">Trufa negra, fior di latte, prosciutto di Parma y aceite de trufa.</div>
+            </div>
+            <div class="prices-row">
+              <div class="prices-group">
+                <div class="price-item"><div class="price-size">Personal</div><div class="price-val">₡8.900</div></div>
+                <div class="price-item"><div class="price-size">Mediana</div><div class="price-val">₡13.500</div></div>
+                <div class="price-item"><div class="price-size">Grande</div><div class="price-val">₡17.200</div></div>
+              </div>
+              <button class="add-btn" onclick="addToCart(event,'Tartufo Nero',8900)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Diavola','Para los amantes del picante. Salami picante, nduja calabresa, chile de árbol, mozzarella y miel de chile.','🌶️','₡7.800')">
+          <div class="item-emoji">🌶️</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Diavola</div>
+              <div class="item-badges"><span class="badge b-hot">🌶 Picante</span><span class="badge b-sig">Favorita</span></div>
+              <div class="item-desc">Salami picante, nduja calabresa, chile de árbol y miel de chile.</div>
+            </div>
+            <div class="prices-row">
+              <div class="prices-group">
+                <div class="price-item"><div class="price-size">Personal</div><div class="price-val">₡7.800</div></div>
+                <div class="price-item"><div class="price-size">Mediana</div><div class="price-val">₡11.200</div></div>
+                <div class="price-item"><div class="price-size">Grande</div><div class="price-val">₡14.500</div></div>
+              </div>
+              <button class="add-btn" onclick="addToCart(event,'Diavola',7800)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Quattro Stagioni','Cuatro zonas: jamón, alcachofas, champiñones y aceitunas negras. Un clásico italiano dividido en estaciones.','🍕','₡7.500')">
+          <div class="item-emoji">🍕</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Quattro Stagioni</div>
+              <div class="item-badges"><span class="badge b-pop">Clásica</span></div>
+              <div class="item-desc">Jamón, alcachofas, champiñones y aceitunas negras. Cuatro zonas.</div>
+            </div>
+            <div class="prices-row">
+              <div class="prices-group">
+                <div class="price-item"><div class="price-size">Personal</div><div class="price-val">₡7.500</div></div>
+                <div class="price-item"><div class="price-size">Mediana</div><div class="price-val">₡10.800</div></div>
+                <div class="price-item"><div class="price-size">Grande</div><div class="price-val">₡13.900</div></div>
+              </div>
+              <button class="add-btn" onclick="addToCart(event,'Quattro Stagioni',7500)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Vegana del Huerto','Base de hummus de ajo asado, vegetales de temporada, tomates cherry, rúcula fresca y aceite de oliva. Sin lácteos.','🌿','₡7.000')">
+          <div class="item-emoji">🌿</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Vegana del Huerto</div>
+              <div class="item-badges"><span class="badge b-veg">🌿 Vegana</span><span class="badge b-new">Nueva</span></div>
+              <div class="item-desc">Hummus de ajo asado, vegetales de temporada, tomates cherry y rúcula.</div>
+            </div>
+            <div class="prices-row">
+              <div class="prices-group">
+                <div class="price-item"><div class="price-size">Personal</div><div class="price-val">₡7.000</div></div>
+                <div class="price-item"><div class="price-size">Mediana</div><div class="price-val">₡10.200</div></div>
+                <div class="price-item"><div class="price-size">Grande</div><div class="price-val">₡13.000</div></div>
+              </div>
+              <button class="add-btn" onclick="addToCart(event,'Vegana del Huerto',7000)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-divider"><span>✦ ✦ ✦</span></div>
+
+    <!-- CALZONE -->
+    <div id="calzone">
+      <div class="section-header">
+        <div class="sh-left">
+          <div class="sh-label">Pizza doblada · Horno de leña</div>
+          <div class="sh-name">Calzone</div>
+        </div>
+        <div class="sh-line"></div>
+        <div class="sh-count">2 opciones</div>
+      </div>
+      <div class="items-list">
+
+        <div class="item-card" onclick="openModal('Calzone Classico','Relleno de ricotta fresca, mozzarella, jamón cocido y champiñones. Sellado a mano y horneado en leña.','🫓','₡8.200')">
+          <div class="item-emoji">🫓</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Calzone Classico</div>
+              <div class="item-badges"><span class="badge b-pop">Popular</span></div>
+              <div class="item-desc">Ricotta fresca, mozzarella, jamón cocido y champiñones. Sellado a mano.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡8.200</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Calzone Classico',8200)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Calzone Diavolo','Relleno de nduja picante, salami, mozzarella y pimientos asados. Para los valientes.','🫓','₡8.800')">
+          <div class="item-emoji">🫓</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Calzone Diavolo</div>
+              <div class="item-badges"><span class="badge b-hot">🌶 Picante</span></div>
+              <div class="item-desc">Nduja picante, salami, mozzarella y pimientos asados. Para valientes.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡8.800</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Calzone Diavolo',8800)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-divider"><span>✦ ✦ ✦</span></div>
+
+    <!-- ENTRADAS -->
+    <div id="entradas">
+      <div class="section-header">
+        <div class="sh-left">
+          <div class="sh-label">Para comenzar</div>
+          <div class="sh-name">Entradas</div>
+        </div>
+        <div class="sh-line"></div>
+        <div class="sh-count">3 opciones</div>
+      </div>
+      <div class="items-list">
+
+        <div class="item-card" onclick="openModal('Bruschetta al Pomodoro','Pan de masa madre tostado al horno de leña, tomate concassé, ajo, albahaca y aceite de oliva extra virgen.','🍞','₡3.200')">
+          <div class="item-emoji">🍞</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Bruschetta al Pomodoro</div>
+              <div class="item-badges"><span class="badge b-veg">🌿 Vegana</span><span class="badge b-pop">Popular</span></div>
+              <div class="item-desc">Pan de masa madre, tomate concassé, ajo y albahaca fresca.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡3.200</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Bruschetta',3200)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Arancini (4 pzs)','Bolitas de risotto fritas, rellenas de mozzarella y ragù de carne. Crujientes por fuera, cremosas por dentro.','🍙','₡4.500')">
+          <div class="item-emoji">🍙</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Arancini (4 pzs)</div>
+              <div class="item-badges"><span class="badge b-sig">Especialidad</span></div>
+              <div class="item-desc">Bolitas de risotto fritas, rellenas de mozzarella y ragù. Crujientes y cremosas.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡4.500</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Arancini',4500)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-divider"><span>✦ ✦ ✦</span></div>
+
+    <!-- PASTAS -->
+    <div id="pastas">
+      <div class="section-header">
+        <div class="sh-left">
+          <div class="sh-label">Pasta fresca artesanal</div>
+          <div class="sh-name">Pastas</div>
+        </div>
+        <div class="sh-line"></div>
+        <div class="sh-count">3 opciones</div>
+      </div>
+      <div class="items-list">
+
+        <div class="item-card" onclick="openModal('Cacio e Pepe','Espagueti de pasta fresca, queso Pecorino Romano, Parmigiano Reggiano y pimienta negra molida gruesa. Roma en un plato.','🍝','₡6.800')">
+          <div class="item-emoji">🍝</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Cacio e Pepe</div>
+              <div class="item-badges"><span class="badge b-veg">Vegetariana</span><span class="badge b-pop">Clásica</span></div>
+              <div class="item-desc">Pasta fresca, Pecorino, Parmigiano y pimienta negra gruesa. Roma en un plato.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡6.800</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Cacio e Pepe',6800)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Tagliatelle al Ragù','Pasta fresca al huevo con ragù boloñés cocinado 6 horas, parmesano y albahaca. La receta de la nonna.','🍝','₡7.500')">
+          <div class="item-emoji">🍝</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Tagliatelle al Ragù</div>
+              <div class="item-badges"><span class="badge b-sig">Receta de la Nonna</span></div>
+              <div class="item-desc">Pasta fresca al huevo, ragù boloñés 6 horas, parmesano y albahaca.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡7.500</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Tagliatelle al Ragù',7500)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-divider"><span>✦ ✦ ✦</span></div>
+
+    <!-- BEBIDAS -->
+    <div id="bebidas">
+      <div class="section-header">
+        <div class="sh-left">
+          <div class="sh-label">Para acompañar</div>
+          <div class="sh-name">Bebidas</div>
+        </div>
+        <div class="sh-line"></div>
+        <div class="sh-count">4 opciones</div>
+      </div>
+      <div class="items-list">
+
+        <div class="item-card" onclick="openModal('Limonada Italiana','Limonada artesanal con limón siciliano, azúcar de caña, menta fresca y agua con gas. Refrescante y aromática.','🍋','₡2.500')">
+          <div class="item-emoji">🍋</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Limonada Italiana</div>
+              <div class="item-badges"><span class="badge b-veg">🌿 Natural</span><span class="badge b-pop">Popular</span></div>
+              <div class="item-desc">Limón siciliano, azúcar de caña, menta y agua con gas.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡2.500</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Limonada Italiana',2500)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Vino Tinto — Copa','Sangiovese toscano. Notas de cereza, especias y un final largo. Maridaje perfecto con pizzas y pastas.','🍷','₡3.800')">
+          <div class="item-emoji">🍷</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Vino Tinto — Copa</div>
+              <div class="item-badges"><span class="badge b-new">Premium</span></div>
+              <div class="item-desc">Sangiovese toscano. Cereza, especias y final largo. Ideal con pizza.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡3.800</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Vino Tinto',3800)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Agua Mineral San Pellegrino','Agua mineral italiana con gas, 500ml. La auténtica compañera de la buena mesa italiana.','💧','₡1.800')">
+          <div class="item-emoji">💧</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">San Pellegrino 500ml</div>
+              <div class="item-badges"><span class="badge b-veg">🌿 Importada</span></div>
+              <div class="item-desc">Agua mineral italiana con gas. La auténtica compañera italiana.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡1.800</div></div>
+              <button class="add-btn" onclick="addToCart(event,'San Pellegrino',1800)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-divider"><span>✦ ✦ ✦</span></div>
+
+    <!-- POSTRES -->
+    <div id="postres">
+      <div class="section-header">
+        <div class="sh-left">
+          <div class="sh-label">El final perfecto</div>
+          <div class="sh-name">Postres</div>
+        </div>
+        <div class="sh-line"></div>
+        <div class="sh-count">3 opciones</div>
+      </div>
+      <div class="items-list" style="margin-bottom:5rem;">
+
+        <div class="item-card" onclick="openModal('Tiramisù della Casa','Tiramisù artesanal con bizcochos savoiardi, espresso, mascarpone y cacao amaro. Receta original de la nonna.','☕','₡4.200')">
+          <div class="item-emoji">☕</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Tiramisù della Casa</div>
+              <div class="item-badges"><span class="badge b-sig">Receta Original</span><span class="badge b-pop">El favorito</span></div>
+              <div class="item-desc">Savoiardi, espresso, mascarpone y cacao amaro. Receta original.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡4.200</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Tiramisù',4200)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openModal('Panna Cotta','Panna cotta de vainilla de Bourbon con coulis de frutos rojos frescos y menta.','🍮','₡3.500')">
+          <div class="item-emoji">🍮</div>
+          <div class="item-body">
+            <div>
+              <div class="item-name">Panna Cotta</div>
+              <div class="item-badges"><span class="badge b-veg">Vegetariana</span></div>
+              <div class="item-desc">Vainilla de Bourbon con coulis de frutos rojos frescos y menta.</div>
+            </div>
+            <div class="prices-row">
+              <div class="price-item"><div class="price-size">Precio</div><div class="price-val main">₡3.500</div></div>
+              <button class="add-btn" onclick="addToCart(event,'Panna Cotta',3500)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="info-footer">
+    <div class="info-ornament"><span>Encuéntranos</span></div>
+    <div class="info-grid">
+      <div class="info-item"><div class="info-label">Dirección</div><div class="info-value">Barrio Escalante, San José</div></div>
+      <div class="info-item"><div class="info-label">Horario</div><div class="info-value">Mar–Dom<br>11:00am – 10:00pm</div></div>
+      <div class="info-item"><div class="info-label">Reservas</div><div class="info-value">+506 2000-0000</div></div>
+      <div class="info-item"><div class="info-label">Pago</div><div class="info-value">Efectivo · Sinpe · Tarjeta</div></div>
+    </div>
+  </div>
+  <div class="powered-by">Menú creado por <span>MenúDigitalPro</span> · ₡20.000 🇨🇷</div>
+
+  <div class="cart-bar" id="cartBar">
+    <div style="display:flex;align-items:center;gap:0.6rem;">
+      <div class="cart-count" id="cartCount">0</div>
+      <span>Ver pedido</span>
+    </div>
+    <div class="cart-total" id="cartTotal">₡0</div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-emoji" id="modalEmoji"></div>
+      <div class="modal-tag">✦ Forno Rosso ✦</div>
+      <div class="modal-name" id="modalName"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-price" id="modalPrice"></div>
+      <button class="modal-btn" id="modalAddBtn">Agregar al Pedido</button>
+    </div>
+  </div>
+
+  <script>
+    var cart = [];
+    function addToCart(e, name, price) {
+      if(e) e.stopPropagation();
+      cart.push({name, price});
+      var total = cart.reduce(function(s,i){return s+i.price;},0);
+      document.getElementById('cartCount').textContent = cart.length;
+      document.getElementById('cartTotal').textContent = '₡' + total.toLocaleString('es-CR');
+      document.getElementById('cartBar').classList.toggle('visible', cart.length > 0);
+      if(e){ var btn=e.target; btn.textContent='✓'; btn.style.background='var(--red)'; btn.style.color='white'; setTimeout(function(){ btn.textContent='+'; btn.style.background=''; btn.style.color=''; },1200); }
+    }
+    function openModal(name, desc, emoji, price) {
+      document.getElementById('modalName').textContent = name;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalEmoji').textContent = emoji;
+      document.getElementById('modalPrice').textContent = price;
+      var p = parseInt(price.replace(/[₡.,]/g,''));
+      document.getElementById('modalAddBtn').onclick = function(){ addToCart(null,name,p); closeModal(); };
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+    function closeModal(e) {
+      if(!e || e.target===document.getElementById('modalOverlay'))
+        document.getElementById('modalOverlay').classList.remove('open');
+    }
+    function easeInOutCubic(t){ return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+    function smoothScrollTo(targetY,dur){
+      var startY=window.pageYOffset,diff=targetY-startY,startTime=null;
+      function step(ct){ if(!startTime)startTime=ct; var p=Math.min((ct-startTime)/dur,1); window.scrollTo(0,startY+diff*easeInOutCubic(p)); if(p<1)requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    }
+    function goToSection(btn,id){
+      document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+      var el=document.getElementById(id);
+      if(el) smoothScrollTo(el.getBoundingClientRect().top+window.pageYOffset-60,800);
+    }
+    function searchMenu(q){
+      var query=q.toLowerCase();
+      document.querySelectorAll('.item-card').forEach(function(card){
+        card.style.display=(card.innerText.toLowerCase().includes(query)||query==='')?'flex':'none';
+      });
+    }
+  </script>
+</body>
+</html>
