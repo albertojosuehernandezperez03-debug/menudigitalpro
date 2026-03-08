@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Café Pétalo — Menú Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream:   #FAF6F0;
+      --warm:    #F2EBE0;
+      --linen:   #E8DDD0;
+      --mocha:   #4A3728;
+      --espresso:#2C1A0E;
+      --caramel: #C07B3A;
+      --gold:    #D4A843;
+      --rose:    #C4798A;
+      --sage:    #7A9E7E;
+      --muted:   rgba(74,55,40,0.5);
+      --border:  rgba(192,123,58,0.2);
+      --border2: rgba(74,55,40,0.08);
+    }
+    html { background: var(--warm); }
+    body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--mocha); max-width: 520px; margin: 0 auto; min-height: 100vh; }
+    @media(min-width:800px){html{padding:2rem 0;}body{border-radius:14px;overflow-y:auto !important;box-shadow:0 0 60px rgba(74,55,40,0.15);}}
+
+    /* paper texture */
+    body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f2ebe0'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23e8ddd0' opacity='0.5'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23e8ddd0' opacity='0.3'/%3E%3C/svg%3E");
+      background-size: 4px; opacity: 0.4; }
+
+    /* HEADER */
+    .header { position: relative; overflow: hidden; background: var(--espresso); border-bottom: 3px solid var(--caramel); }
+    .hdr-pattern {
+      position: absolute; inset: 0; opacity: 0.06;
+      background-image: repeating-linear-gradient(45deg, var(--cream) 0, var(--cream) 1px, transparent 0, transparent 50%);
+      background-size: 10px 10px;
+    }
+    .hdr-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 260px; height: 130px; background: radial-gradient(ellipse, rgba(192,123,58,0.15) 0%, transparent 70%); }
+    .hdr-inner { position: relative; z-index: 1; padding: 2.5rem 1.5rem 2rem; text-align: center; }
+    .hdr-ornament { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1rem; }
+    .hdr-orn-line { height: 1px; width: 35px; background: linear-gradient(90deg, transparent, var(--caramel)); }
+    .hdr-orn-line.r { background: linear-gradient(90deg, var(--caramel), transparent); }
+    .hdr-orn-dot { width: 5px; height: 5px; background: var(--caramel); border-radius: 50%; }
+    .hdr-logo { width: 72px; height: 72px; border-radius: 50%; background: rgba(192,123,58,0.12); border: 1.5px solid rgba(192,123,58,0.3); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 0 30px rgba(192,123,58,0.12); }
+    .hdr-name { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--cream); letter-spacing: 0.04em; margin-bottom: 0.2rem; line-height: 1.1; }
+    .hdr-name em { font-style: italic; color: var(--gold); }
+    .hdr-sub { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(250,246,240,0.45); margin-bottom: 0.5rem; }
+    .hdr-tagline { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: rgba(250,246,240,0.35); margin-bottom: 0.9rem; }
+    .hdr-info { display: flex; justify-content: center; gap: 1.4rem; font-size: 0.68rem; color: rgba(250,246,240,0.45); flex-wrap: wrap; font-weight: 300; }
+
+    /* BANNER */
+    .banner { background: var(--caramel); padding: 0.5rem 1.5rem; text-align: center; font-size: 0.75rem; letter-spacing: 0.1em; color: white; font-weight: 600; }
+
+    /* CATS */
+    .cats-wrap { position: sticky; top: 0; z-index: 50; background: white; border-bottom: 2px solid var(--border); box-shadow: 0 2px 12px rgba(74,55,40,0.06); }
+    .cats-scroll { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .cats-scroll::-webkit-scrollbar { display: none; }
+    .cat-btn { padding: 0.88rem 1.1rem; border: none; background: transparent; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 600; color: var(--muted); white-space: nowrap; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 2px solid transparent; transition: all 0.2s; flex-shrink: 0; margin-bottom: -2px; }
+    .cat-btn.active { color: var(--caramel); border-bottom-color: var(--caramel); }
+    .cat-btn:hover { color: var(--mocha); }
+
+    /* SEARCH */
+    .search-bar { padding: 0.65rem 1.2rem; background: white; border-bottom: 1px solid var(--border2); }
+    .search-input { width: 100%; padding: 0.55rem 1rem 0.55rem 2.2rem; border: 1px solid var(--border); background: var(--warm); color: var(--mocha); outline: none; font-family: 'Nunito', sans-serif; font-size: 0.82rem; border-radius: 100px; transition: border-color 0.2s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='%23C07B3A' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 0.8rem center; }
+    .search-input:focus { border-color: var(--caramel); }
+    .search-input::placeholder { color: rgba(74,55,40,0.3); }
+
+    /* FEATURED */
+    .featured { margin: 0.9rem 1.2rem; background: linear-gradient(135deg, var(--espresso), var(--mocha)); border-radius: 8px; padding: 1.1rem; display: flex; align-items: center; gap: 1rem; position: relative; overflow: hidden; }
+    .featured::after { content: '☕'; position: absolute; right: -8px; bottom: -12px; font-size: 5rem; opacity: 0.1; transform: rotate(-15deg); }
+    .feat-emoji { font-size: 2.5rem; flex-shrink: 0; }
+    .feat-info { flex: 1; }
+    .feat-tag { font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.2rem; font-weight: 600; }
+    .feat-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); font-weight: 600; margin-bottom: 0.15rem; }
+    .feat-desc { font-size: 0.7rem; color: rgba(250,246,240,0.5); }
+    .feat-price { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); flex-shrink: 0; font-weight: 600; }
+
+    /* CONTENT */
+    .content { padding: 0 0 6rem; position: relative; z-index: 1; background: var(--cream); }
+
+    /* SECTION HDR */
+    .sec-hdr { padding: 1.7rem 1.2rem 0.7rem; }
+    .sec-label { font-size: 0.56rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.25rem; font-weight: 600; }
+    .sec-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.3rem; }
+    .sec-rule { display: flex; align-items: center; gap: 0.6rem; }
+    .sec-rule::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+    .sec-count { font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted); }
+
+    /* ITEMS */
+    .items-list { padding: 0.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .item-card { background: white; border: 1px solid var(--border2); display: flex; align-items: stretch; cursor: pointer; overflow: hidden; transition: box-shadow 0.25s, transform 0.2s; border-radius: 8px; position: relative; }
+    .item-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--caramel), var(--rose)); transform: scaleY(0); transform-origin: bottom; transition: transform 0.3s; border-radius: 3px 0 0 3px; }
+    .item-card:hover { box-shadow: 0 4px 20px rgba(74,55,40,0.1); transform: translateY(-2px); }
+    .item-card:hover::before { transform: scaleY(1); }
+    .item-emoji { width: 82px; min-height: 90px; flex-shrink: 0; background: var(--warm); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; border-right: 1px solid var(--border2); }
+    .item-body { padding: 0.9rem 0.9rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .item-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.12rem; }
+    .item-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.3rem; }
+    .badge { font-size: 0.54rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.12rem 0.55rem; border: 1px solid; border-radius: 100px; font-weight: 600; }
+    .b-sig  { color: var(--caramel); border-color: rgba(192,123,58,0.3); background: rgba(192,123,58,0.07); }
+    .b-new  { color: var(--rose); border-color: rgba(196,121,138,0.3); background: rgba(196,121,138,0.07); }
+    .b-pop  { color: var(--muted); border-color: var(--border2); }
+    .b-veg  { color: var(--sage); border-color: rgba(122,158,126,0.3); background: rgba(122,158,126,0.07); }
+    .b-sf   { color: #B07B3A; border-color: rgba(176,123,58,0.3); background: rgba(176,123,58,0.06); }
+    .item-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.6; margin-bottom: 0.5rem; font-weight: 300; }
+    .item-foot { display: flex; align-items: center; justify-content: space-between; }
+    .item-price { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--caramel); font-weight: 600; }
+    .add-btn { width: 28px; height: 28px; background: transparent; border: 1.5px solid var(--border); color: var(--caramel); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border-radius: 50%; }
+    .add-btn:hover { background: var(--caramel); color: white; border-color: var(--caramel); }
+
+    /* SIZE PRICES */
+    .sizes-row { display: flex; gap: 1rem; align-items: baseline; }
+    .size-item { text-align: center; }
+    .size-lbl { font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(74,55,40,0.35); margin-bottom: 0.1rem; }
+    .size-val { font-family: 'Playfair Display', serif; font-size: 0.88rem; color: var(--caramel); font-weight: 600; }
+
+    /* DIVIDER */
+    .divider { display: flex; align-items: center; gap: 1rem; padding: 0.2rem 1.2rem; margin: 0.5rem 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .divider span { color: var(--caramel); font-size: 0.8rem; }
+
+    /* CART */
+    .cart-bar { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); background: var(--espresso); color: var(--cream); padding: 0.85rem 1.8rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 8px 30px rgba(44,26,14,0.3); cursor: pointer; z-index: 100; min-width: 260px; justify-content: space-between; opacity: 0; pointer-events: none; transition: opacity 0.3s; font-family: 'Nunito', sans-serif; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 100px; font-weight: 600; }
+    .cart-bar.visible { opacity: 1; pointer-events: all; }
+    .cart-count { background: var(--caramel); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; }
+    .cart-total { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--gold); }
+
+    /* FOOTER */
+    .info-footer { background: var(--espresso); padding: 2rem 1.5rem; border-top: 3px solid var(--caramel); position: relative; z-index: 1; }
+    .info-ornament { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; }
+    .info-ornament::before, .info-ornament::after { content: ''; flex: 1; height: 1px; background: rgba(192,123,58,0.3); }
+    .info-ornament span { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.82rem; color: var(--gold); }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .info-item { padding: 0.8rem; border: 1px solid rgba(192,123,58,0.15); background: rgba(192,123,58,0.06); border-radius: 6px; }
+    .info-label { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; font-weight: 600; }
+    .info-value { font-size: 0.78rem; color: rgba(250,246,240,0.5); line-height: 1.55; font-weight: 300; }
+    .powered-by { text-align: center; padding: 0.8rem; font-size: 0.65rem; color: rgba(250,246,240,0.2); background: var(--espresso); border-top: 1px solid rgba(192,123,58,0.1); position: relative; z-index: 1; }
+    .powered-by span { color: var(--caramel); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(44,26,14,0.8); z-index: 200; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--cream); width: 100%; border-top: 3px solid var(--caramel); padding: 1.8rem 1.5rem 1.5rem; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.32,0.72,0,1); max-height: 82vh; overflow-y: auto; position: relative; border-radius: 16px 16px 0 0; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-handle { width: 32px; height: 3px; background: var(--linen); margin: 0 auto 1.2rem; border-radius: 2px; }
+    .modal-emoji { font-size: 3rem; text-align: center; margin-bottom: 0.8rem; }
+    .modal-tag { font-size: 0.56rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--caramel); text-align: center; margin-bottom: 0.4rem; font-weight: 600; }
+    .modal-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--espresso); margin-bottom: 0.6rem; }
+    .modal-desc { font-size: 0.82rem; color: var(--muted); text-align: center; line-height: 1.75; margin-bottom: 1.2rem; font-weight: 300; }
+    .modal-price { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--caramel); text-align: center; margin-bottom: 1.5rem; font-weight: 600; }
+    .modal-btn { width: 100%; background: var(--espresso); color: var(--cream); border: none; padding: 1rem; font-family: 'Nunito', sans-serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; border-radius: 8px; font-weight: 700; }
+    .modal-btn:hover { background: var(--mocha); }
+    .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; background: transparent; border: 1.5px solid var(--border); color: var(--muted); width: 28px; height: 28px; cursor: pointer; font-size: 0.82rem; border-radius: 50%; transition: all 0.2s; }
+    .modal-close:hover { border-color: var(--caramel); color: var(--mocha); }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="hdr-pattern"></div><div class="hdr-glow"></div>
+    <div class="hdr-inner">
+      <div class="hdr-ornament"><div class="hdr-orn-line"></div><div class="hdr-orn-dot"></div><div class="hdr-orn-line r"></div></div>
+      <div class="hdr-logo">☕</div>
+      <div class="hdr-name">Café <em>Pétalo</em></div>
+      <div class="hdr-sub">Cafetería · Pastelería · Brunch</div>
+      <div class="hdr-tagline">"Un rincón cálido para los momentos que importan"</div>
+      <div class="hdr-info"><span>⏰ 7am–8pm</span><span>📍 San Pedro, SJ</span><span>⭐ 4.9</span></div>
+    </div>
+  </header>
+
+  <div class="banner">☕ Café de origen costarricense · Tostado artesanal · Pasteles horneados cada mañana</div>
+
+  <div class="cats-wrap">
+    <div class="cats-scroll">
+      <button class="cat-btn active" onclick="goSec(this,'cafe')">☕ Cafés</button>
+      <button class="cat-btn" onclick="goSec(this,'frios')">🧊 Fríos</button>
+      <button class="cat-btn" onclick="goSec(this,'brunch')">🥐 Brunch</button>
+      <button class="cat-btn" onclick="goSec(this,'pasteles')">🎂 Pasteles</button>
+      <button class="cat-btn" onclick="goSec(this,'panaderia')">🥖 Panadería</button>
+      <button class="cat-btn" onclick="goSec(this,'bebidas')">🍹 Bebidas</button>
+    </div>
+  </div>
+  <div class="search-bar"><input class="search-input" type="text" placeholder="Buscar en el menú..." oninput="srch(this.value)"/></div>
+
+  <div class="featured">
+    <div class="feat-emoji">☕</div>
+    <div class="feat-info">
+      <div class="feat-tag">✦ La estrella de la casa</div>
+      <div class="feat-name">Cortado de Especialidad</div>
+      <div class="feat-desc">Espresso doble de origen, leche Oropel texturizada</div>
+    </div>
+    <div class="feat-price">₡2.800</div>
+  </div>
+
+  <div class="content">
+    <div id="cafe">
+      <div class="sec-hdr">
+        <div class="sec-label">✦ Café de Origen · Tostado Artesanal</div>
+        <div class="sec-name">Cafés Calientes</div>
+        <div class="sec-rule"><div class="sec-count">5 opciones</div></div>
+      </div>
+      <div class="items-list">
+        <div class="item-card" onclick="openM('Cortado de Especialidad','Espresso doble de origen costarricense con leche Oropel texturizada al vapor. Equilibrio perfecto entre lo cremoso y lo intenso.','☕','₡2.800')">
+          <div class="item-emoji">☕</div><div class="item-body"><div><div class="item-name">Cortado de Especialidad</div><div class="item-badges"><span class="badge b-sig">Estrella</span><span class="badge b-pop">Popular</span></div><div class="item-desc">Espresso doble de origen CR, leche Oropel texturizada al vapor.</div></div><div class="item-foot"><div class="item-price">₡2.800</div><button class="add-btn" onclick="addC(event,'Cortado',2800)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Latte de Vainilla de Bourbon','Espresso, leche Oropel cremosa y sirope de vainilla de Bourbon importado. Disponible en pequeño, mediano y grande.','🍶','₡2.200 – ₡3.500')">
+          <div class="item-emoji">🍶</div><div class="item-body"><div><div class="item-name">Latte de Vainilla Bourbon</div><div class="item-badges"><span class="badge b-pop">Favorito</span></div><div class="item-desc">Espresso, leche cremosa y sirope de vainilla de Bourbon importado.</div></div><div class="item-foot"><div class="sizes-row"><div class="size-item"><div class="size-lbl">Peq</div><div class="size-val">₡2.200</div></div><div class="size-item"><div class="size-lbl">Med</div><div class="size-val">₡2.800</div></div><div class="size-item"><div class="size-lbl">Gde</div><div class="size-val">₡3.500</div></div></div><button class="add-btn" onclick="addC(event,'Latte Vainilla',2800)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Cappuccino Clásico','Espresso doble con leche cremosa texturizada y una capa de espuma sedosa. Servido en taza precalentada.','☕','₡2.500')">
+          <div class="item-emoji">☕</div><div class="item-body"><div><div class="item-name">Cappuccino Clásico</div><div class="item-badges"><span class="badge b-pop">Clásico</span></div><div class="item-desc">Espresso doble, leche texturizada y espuma sedosa en taza precalentada.</div></div><div class="item-foot"><div class="item-price">₡2.500</div><button class="add-btn" onclick="addC(event,'Cappuccino',2500)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Flat White de Origen','Ristretto doble con leche de microespuma cremosa. Para los que aprecian el café en su estado más puro.','☕','₡2.600')">
+          <div class="item-emoji">☕</div><div class="item-body"><div><div class="item-name">Flat White de Origen</div><div class="item-badges"><span class="badge b-sig">Especialidad</span></div><div class="item-desc">Ristretto doble con microespuma cremosa. Para los amantes del café puro.</div></div><div class="item-foot"><div class="item-price">₡2.600</div><button class="add-btn" onclick="addC(event,'Flat White',2600)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Matcha Latte Ceremonial','Matcha ceremonial japonés de primera extracción, leche de avena tostada. Disponible caliente o frío. Vegano.','🍵','₡2.800')">
+          <div class="item-emoji">🍵</div><div class="item-body"><div><div class="item-name">Matcha Latte Ceremonial</div><div class="item-badges"><span class="badge b-veg">🌿 Vegano</span><span class="badge b-new">Nuevo</span></div><div class="item-desc">Matcha ceremonial, leche de avena. Caliente o frío.</div></div><div class="item-foot"><div class="item-price">₡2.800</div><button class="add-btn" onclick="addC(event,'Matcha Latte',2800)">+</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div id="frios">
+      <div class="sec-hdr">
+        <div class="sec-label">✦ Para refrescar</div>
+        <div class="sec-name">Cafés Fríos</div>
+        <div class="sec-rule"><div class="sec-count">3 opciones</div></div>
+      </div>
+      <div class="items-list">
+        <div class="item-card" onclick="openM('Cold Brew 24h','Café costarricense de altura extraído en frío durante 24 horas. Servido sobre hielo con leche de coco o solo.','🧊','₡3.200')">
+          <div class="item-emoji">🧊</div><div class="item-body"><div><div class="item-name">Cold Brew 24h</div><div class="item-badges"><span class="badge b-sig">Artesanal</span><span class="badge b-pop">Popular</span></div><div class="item-desc">Extracción en frío 24h, café CR de altura. Solo o con leche de coco.</div></div><div class="item-foot"><div class="item-price">₡3.200</div><button class="add-btn" onclick="addC(event,'Cold Brew',3200)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Iced Caramel Latte','Espresso sobre hielo, leche Oropel fría y sirope de caramelo artesanal hecho en casa.','🧋','₡3.500')">
+          <div class="item-emoji">🧋</div><div class="item-body"><div><div class="item-name">Iced Caramel Latte</div><div class="item-badges"><span class="badge b-pop">Favorito verano</span></div><div class="item-desc">Espresso sobre hielo, leche fría y caramelo artesanal casero.</div></div><div class="item-foot"><div class="item-price">₡3.500</div><button class="add-btn" onclick="addC(event,'Iced Caramel',3500)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Pink Lemonade Hibisco','Limonada casera infusionada con flores de hibisco, miel de abeja local y menta fresca. Sin cafeína.','🌸','₡2.500')">
+          <div class="item-emoji">🌸</div><div class="item-body"><div><div class="item-name">Limonada de Hibisco</div><div class="item-badges"><span class="badge b-veg">🌿 Sin cafeína</span></div><div class="item-desc">Hibisco, miel local y menta. Fresca y floral.</div></div><div class="item-foot"><div class="item-price">₡2.500</div><button class="add-btn" onclick="addC(event,'Limonada Hibisco',2500)">+</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div id="brunch">
+      <div class="sec-hdr">
+        <div class="sec-label">✦ Desayunos & Brunch</div>
+        <div class="sec-name">Para Comer</div>
+        <div class="sec-rule"><div class="sec-count">4 opciones</div></div>
+      </div>
+      <div class="items-list">
+        <div class="item-card" onclick="openM('Tostada de Aguacate con Huevo Pochado','Pan artesanal de masa madre, aguacate Hass, huevo pochado, tomate cherry asado, microgreens y sal de trufa.','🥑','₡5.200')">
+          <div class="item-emoji">🥑</div><div class="item-body"><div><div class="item-name">Tostada con Huevo Pochado</div><div class="item-badges"><span class="badge b-sig">Brunch Estrella</span></div><div class="item-desc">Masa madre, aguacate, huevo pochado, tomate cherry y sal de trufa.</div></div><div class="item-foot"><div class="item-price">₡5.200</div><button class="add-btn" onclick="addC(event,'Tostada Huevo',5200)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Croissant de Mantequilla con Jamón','Croissant hojaldrado con mantequilla normanda, jamón serrano, queso gruyer y mostaza Dijon.','🥐','₡3.800')">
+          <div class="item-emoji">🥐</div><div class="item-body"><div><div class="item-name">Croissant con Jamón y Gruyer</div><div class="item-badges"><span class="badge b-pop">Popular</span></div><div class="item-desc">Hojaldre de mantequilla normanda, jamón serrano, gruyer y Dijon.</div></div><div class="item-foot"><div class="item-price">₡3.800</div><button class="add-btn" onclick="addC(event,'Croissant Jamón',3800)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('French Toast con Frutos Rojos','Brioche empapado en crema de huevo y vainilla, dorado en mantequilla. Con frutos rojos, maple y azúcar glas.','🍞','₡4.500')">
+          <div class="item-emoji">🍞</div><div class="item-body"><div><div class="item-name">French Toast con Frutos Rojos</div><div class="item-badges"><span class="badge b-new">Nuevo</span></div><div class="item-desc">Brioche en crema de vainilla, frutos rojos frescos, maple y azúcar glas.</div></div><div class="item-foot"><div class="item-price">₡4.500</div><button class="add-btn" onclick="addC(event,'French Toast',4500)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Quiche del Día','Quiche de masa corta artesanal con relleno rotativo de temporada. Consultar disponibilidad del día.','🥧','₡4.200')">
+          <div class="item-emoji">🥧</div><div class="item-body"><div><div class="item-name">Quiche del Día</div><div class="item-badges"><span class="badge b-sf">Temporada</span></div><div class="item-desc">Masa corta artesanal, relleno rotativo de temporada. Preguntar al barista.</div></div><div class="item-foot"><div class="item-price">₡4.200</div><button class="add-btn" onclick="addC(event,'Quiche',4200)">+</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div id="pasteles">
+      <div class="sec-hdr">
+        <div class="sec-label">✦ Horneados cada mañana</div>
+        <div class="sec-name">Pasteles & Tortas</div>
+        <div class="sec-rule"><div class="sec-count">4 opciones</div></div>
+      </div>
+      <div class="items-list">
+        <div class="item-card" onclick="openM('Torta de Zanahoria con Queso Crema','Bizcocho húmedo de zanahoria, especias, nueces y una generosa cobertura de queso crema con ralladura de naranja.','🥕','₡3.500')">
+          <div class="item-emoji">🥕</div><div class="item-body"><div><div class="item-name">Torta de Zanahoria</div><div class="item-badges"><span class="badge b-sig">La favorita</span></div><div class="item-desc">Bizcocho húmedo de zanahoria y nueces, cobertura de queso crema y naranja.</div></div><div class="item-foot"><div class="item-price">₡3.500</div><button class="add-btn" onclick="addC(event,'Torta Zanahoria',3500)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Cheesecake de Frutos del Bosque','Base de galleta de mantequilla, cremoso de queso Philadelphia y compota caliente de frutos del bosque.','🍰','₡4.200')">
+          <div class="item-emoji">🍰</div><div class="item-body"><div><div class="item-name">Cheesecake de Frutos del Bosque</div><div class="item-badges"><span class="badge b-pop">Top ventas</span></div><div class="item-desc">Base de galleta, queso Philadelphia y compota de frutos del bosque.</div></div><div class="item-foot"><div class="item-price">₡4.200</div><button class="add-btn" onclick="addC(event,'Cheesecake',4200)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Brownie de Cacao Belga','Brownie denso y fudgy con cacao Valrhona 70%, nueces pecanas y chips de chocolate. Servido tibio con helado.','🍫','₡3.800')">
+          <div class="item-emoji">🍫</div><div class="item-body"><div><div class="item-name">Brownie Valrhona 70%</div><div class="item-badges"><span class="badge b-new">Premium</span></div><div class="item-desc">Cacao Valrhona, nueces pecanas y chips. Tibio con helado de vainilla.</div></div><div class="item-foot"><div class="item-price">₡3.800</div><button class="add-btn" onclick="addC(event,'Brownie',3800)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Eclair de Café y Praliné','Pasta choux hojaldrada rellena de crema de café arábica y praliné de avellana, glaseado de chocolate oscuro.','🧁','₡3.200')">
+          <div class="item-emoji">🧁</div><div class="item-body"><div><div class="item-name">Éclair de Café y Praliné</div><div class="item-badges"><span class="badge b-sig">Artesanal</span></div><div class="item-desc">Choux rellena de crema de café, praliné de avellana y glaseado oscuro.</div></div><div class="item-foot"><div class="item-price">₡3.200</div><button class="add-btn" onclick="addC(event,'Eclair',3200)">+</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div id="panaderia">
+      <div class="sec-hdr">
+        <div class="sec-label">✦ Pan artesanal del día</div>
+        <div class="sec-name">Panadería</div>
+        <div class="sec-rule"><div class="sec-count">3 opciones</div></div>
+      </div>
+      <div class="items-list">
+        <div class="item-card" onclick="openM('Croissant de Mantequilla Puro','Croissant hojaldrado en 27 capas con mantequilla normanda AOP. Crujiente por fuera, suave y aéreo por dentro.','🥐','₡2.200')">
+          <div class="item-emoji">🥐</div><div class="item-body"><div><div class="item-name">Croissant Puro</div><div class="item-badges"><span class="badge b-sig">Artesanal</span></div><div class="item-desc">27 capas de hojaldre, mantequilla normanda AOP. Crujiente y aéreo.</div></div><div class="item-foot"><div class="item-price">₡2.200</div><button class="add-btn" onclick="addC(event,'Croissant Puro',2200)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Muffin de Arándanos y Limón','Muffin esponjoso de arándanos frescos con ralladura de limón, crumble de azúcar morena y mantequilla.','🫐','₡1.800')">
+          <div class="item-emoji">🫐</div><div class="item-body"><div><div class="item-name">Muffin Arándanos y Limón</div><div class="item-badges"><span class="badge b-pop">Popular</span></div><div class="item-desc">Arándanos frescos, ralladura de limón y crumble de azúcar morena.</div></div><div class="item-foot"><div class="item-price">₡1.800</div><button class="add-btn" onclick="addC(event,'Muffin Arandanos',1800)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Scone de Crema con Clotted Cream','Scone inglés clásico horneado en el momento. Servido con clotted cream y mermelada de fresa artesanal.','🫖','₡2.500')">
+          <div class="item-emoji">🫖</div><div class="item-body"><div><div class="item-name">Scone con Clotted Cream</div><div class="item-badges"><span class="badge b-new">Nuevo</span></div><div class="item-desc">Scone inglés horneado al momento, clotted cream y mermelada de fresa.</div></div><div class="item-foot"><div class="item-price">₡2.500</div><button class="add-btn" onclick="addC(event,'Scone',2500)">+</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"><span>✦</span></div>
+
+    <div id="bebidas">
+      <div class="sec-hdr">
+        <div class="sec-label">✦ Sin cafeína</div>
+        <div class="sec-name">Otras Bebidas</div>
+        <div class="sec-rule"><div class="sec-count">2 opciones</div></div>
+      </div>
+      <div class="items-list" style="margin-bottom:5rem;">
+        <div class="item-card" onclick="openM('Té de Hierbas de la Huerta','Infusión de hierbas frescas: manzanilla, menta, lavanda o jengibre-cúrcuma. Servida en tetera individual.','🫖','₡1.800')">
+          <div class="item-emoji">🫖</div><div class="item-body"><div><div class="item-name">Té de Hierbas de la Huerta</div><div class="item-badges"><span class="badge b-veg">🌿 Natural</span></div><div class="item-desc">Manzanilla, menta, lavanda o jengibre-cúrcuma. En tetera individual.</div></div><div class="item-foot"><div class="item-price">₡1.800</div><button class="add-btn" onclick="addC(event,'Té Hierbas',1800)">+</button></div></div>
+        </div>
+        <div class="item-card" onclick="openM('Chocolate Caliente Artesanal','Cacao Valrhona 62% derretido con leche Oropel, canela de Ceylán y un toque de chile. Espeso y reconfortante.','🍫','₡2.800')">
+          <div class="item-emoji">🍫</div><div class="item-body"><div><div class="item-name">Chocolate Caliente Artesanal</div><div class="item-badges"><span class="badge b-sig">Artesanal</span><span class="badge b-pop">Favorito</span></div><div class="item-desc">Valrhona 62%, leche Oropel, canela Ceylán y toque de chile.</div></div><div class="item-foot"><div class="item-price">₡2.800</div><button class="add-btn" onclick="addC(event,'Chocolate Caliente',2800)">+</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-footer">
+    <div class="info-ornament"><span>Encuéntranos</span></div>
+    <div class="info-grid">
+      <div class="info-item"><div class="info-label">Dirección</div><div class="info-value">San Pedro, San José</div></div>
+      <div class="info-item"><div class="info-label">Horario</div><div class="info-value">Lun–Sáb<br>7:00am – 8:00pm</div></div>
+      <div class="info-item"><div class="info-label">WhatsApp</div><div class="info-value">+506 0000-0000</div></div>
+      <div class="info-item"><div class="info-label">Pago</div><div class="info-value">Efectivo · Sinpe · Tarjeta</div></div>
+    </div>
+  </div>
+  <div class="powered-by">Menú creado por <span>MenúDigitalPro</span> · ₡20.000 🇨🇷</div>
+
+  <div class="cart-bar" id="cartBar">
+    <div style="display:flex;align-items:center;gap:0.6rem;"><div class="cart-count" id="cartCount">0</div><span>Ver pedido</span></div>
+    <div class="cart-total" id="cartTotal">₡0</div>
+  </div>
+  <div class="modal-overlay" id="modalOverlay" onclick="closeM(event)">
+    <div class="modal">
+      <div class="modal-handle"></div><button class="modal-close" onclick="closeM()">✕</button>
+      <div class="modal-emoji" id="mE"></div><div class="modal-tag">✦ Café Pétalo ✦</div>
+      <div class="modal-name" id="mN"></div><div class="modal-desc" id="mD"></div>
+      <div class="modal-price" id="mP"></div>
+      <button class="modal-btn" id="mB">Agregar al Pedido</button>
+    </div>
+  </div>
+  <script>
+    var cart=[];
+    function addC(e,n,p){if(e)e.stopPropagation();cart.push({n,p});var t=cart.reduce(function(s,i){return s+i.p;},0);document.getElementById('cartCount').textContent=cart.length;document.getElementById('cartTotal').textContent='₡'+t.toLocaleString('es-CR');document.getElementById('cartBar').classList.toggle('visible',cart.length>0);if(e){var b=e.target;b.textContent='✓';b.style.background='var(--caramel)';b.style.color='white';setTimeout(function(){b.textContent='+';b.style.background='';b.style.color='';},1200);}}
+    function openM(name,desc,emoji,price){document.getElementById('mN').textContent=name;document.getElementById('mD').textContent=desc;document.getElementById('mE').textContent=emoji;document.getElementById('mP').textContent=price;var p=parseInt(price.replace(/[₡.,\s–a-z]/gi,''));if(isNaN(p))p=0;document.getElementById('mB').onclick=function(){addC(null,name,p);closeM();};document.getElementById('modalOverlay').classList.add('open');}
+    function closeM(e){if(!e||e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('open');}
+    function eio(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+    function sto(y,d){var s=window.pageYOffset,df=y-s,st=null;function step(ct){if(!st)st=ct;var p=Math.min((ct-st)/d,1);window.scrollTo(0,s+df*eio(p));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+    function goSec(btn,id){document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');var el=document.getElementById(id);if(el)sto(el.getBoundingClientRect().top+window.pageYOffset-60,800);}
+    function srch(q){var qr=q.toLowerCase();document.querySelectorAll('.item-card').forEach(function(c){c.style.display=(c.innerText.toLowerCase().includes(qr)||q==='')?'flex':'none';});}
+  </script>
+</body>
+</html>
