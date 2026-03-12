@@ -186,17 +186,35 @@
   <!-- GRID -->
   <div class="cat-grid">
 
-    <!-- CARD 1: Available -->
-    <div class="style-card" onclick="window.open('https://menudigitalpro.github.io/menudigitalpro/menu-googlesite.html','_blank')">
-      <div class="style-preview">
-        <iframe src="https://menudigitalpro.github.io/menudigitalpro/menu-googlesite.html" loading="lazy" tabindex="-1"></iframe>
+    <!-- CARD 1: Soda · 2 estilos rotativos -->
+    <div class="style-card">
+      <div class="style-preview" style="position:relative;overflow:hidden;height:380px;cursor:default;">
+        <div style="position:absolute;inset:0;">
+          <iframe
+            src="https://menudigitalpro.github.io/menudigitalpro/menu-googlesite.html"
+            id="frame-soda-0"
+            style="width:200%;height:200%;transform:scale(0.5);transform-origin:top left;border:none;pointer-events:none;position:absolute;top:0;left:0;opacity:1;transition:opacity 0.8s ease;"
+            loading="lazy" tabindex="-1"></iframe>
+          <iframe
+            src="https://menudigitalpro.github.io/menudigitalpro/menu-soda.html"
+            id="frame-soda-1"
+            style="width:200%;height:200%;transform:scale(0.5);transform-origin:top left;border:none;pointer-events:none;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.8s ease;"
+            loading="lazy" tabindex="-1"></iframe>
+        </div>
         <div class="preview-overlay"></div>
+        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;">
+          <div id="dot-soda-0" style="width:6px;height:6px;border-radius:50%;background:white;opacity:1;transition:opacity 0.3s;"></div>
+          <div id="dot-soda-1" style="width:6px;height:6px;border-radius:50%;background:white;opacity:0.3;transition:opacity 0.3s;"></div>
+        </div>
       </div>
       <div class="style-info">
-        <span class="style-tag tag-available">✓ Disponible</span>
-        <div class="style-name">Estilo Soda Tica</div>
-        <div class="style-desc">Fresco, colorido y familiar. Verde vibrante con toques dorados. Ideal para sodas, sodas-bar y restaurantes de comida típica costarricense.</div>
-        <button class="style-btn">Ver Demo Completo →</button>
+        <span class="style-tag tag-available">✓ Disponible · 2 estilos</span>
+        <div class="style-name">Estilo Soda / Comida Típica</div>
+        <div class="style-desc">Dos variantes: clásica verde con toques dorados y nueva versión callejera vibrante con cuadrícula de platillos y panel admin. Ideal para sodas y comida típica costarricense.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.5rem;">
+          <button class="style-btn" onclick="window.open('https://menudigitalpro.github.io/menudigitalpro/menu-googlesite.html','_blank')">🍃 Clásica →</button>
+          <button class="style-btn" onclick="window.open('https://menudigitalpro.github.io/menudigitalpro/menu-soda.html','_blank')">🌮 Callejera →</button>
+        </div>
       </div>
     </div>
 
@@ -214,17 +232,35 @@
       </div>
     </div>
 
-    <!-- CARD 3: Gourmet Available -->
-    <div class="style-card" onclick="window.open('https://menudigitalpro.github.io/menudigitalpro/menu-gourmet.html','_blank')">
-      <div class="style-preview">
-        <iframe src="https://menudigitalpro.github.io/menudigitalpro/menu-gourmet.html" loading="lazy" tabindex="-1"></iframe>
+    <!-- CARD 3: Gourmet · 2 estilos rotativos -->
+    <div class="style-card">
+      <div class="style-preview" style="position:relative;overflow:hidden;height:380px;cursor:default;">
+        <div style="position:absolute;inset:0;">
+          <iframe
+            src="https://menudigitalpro.github.io/menudigitalpro/menu-gourmet.html"
+            id="frame-gourmet-0"
+            style="width:200%;height:200%;transform:scale(0.5);transform-origin:top left;border:none;pointer-events:none;position:absolute;top:0;left:0;opacity:1;transition:opacity 0.8s ease;"
+            loading="lazy" tabindex="-1"></iframe>
+          <iframe
+            src="https://menudigitalpro.github.io/menudigitalpro/menu-luxury.html"
+            id="frame-gourmet-1"
+            style="width:200%;height:200%;transform:scale(0.5);transform-origin:top left;border:none;pointer-events:none;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.8s ease;"
+            loading="lazy" tabindex="-1"></iframe>
+        </div>
         <div class="preview-overlay"></div>
+        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;">
+          <div id="dot-gourmet-0" style="width:6px;height:6px;border-radius:50%;background:white;opacity:1;transition:opacity 0.3s;"></div>
+          <div id="dot-gourmet-1" style="width:6px;height:6px;border-radius:50%;background:white;opacity:0.3;transition:opacity 0.3s;"></div>
+        </div>
       </div>
       <div class="style-info">
-        <span class="style-tag tag-available">✓ Disponible</span>
-        <div class="style-name">Estilo Gourmet</div>
-        <div class="style-desc">Azul marino profundo con dorado fino y tipografía serif elegante. Grilla artesanal y ornamentos clásicos. Ideal para restaurantes de autor, haute cuisine y maridaje.</div>
-        <button class="style-btn">Ver Demo Completo →</button>
+        <span class="style-tag tag-available">✓ Disponible · 2 estilos</span>
+        <div class="style-name">Estilo Gourmet / Fine Dining</div>
+        <div class="style-desc">Dos variantes: gourmet azul marino con dorado artesanal y nueva versión luxury de pantalla completa con scroll cinematográfico. Para restaurantes de autor y haute cuisine.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.5rem;">
+          <button class="style-btn" onclick="window.open('https://menudigitalpro.github.io/menudigitalpro/menu-gourmet.html','_blank')">🍷 Gourmet →</button>
+          <button class="style-btn" onclick="window.open('https://menudigitalpro.github.io/menudigitalpro/menu-luxury.html','_blank')">✦ Luxury →</button>
+        </div>
       </div>
     </div>
 
@@ -369,15 +405,14 @@
 
 
   <script>
-    // Dulcería slider
-    (function() {
+    function makeSlider(id, interval) {
       var frames = [
-        document.getElementById('frame-dulceria-0'),
-        document.getElementById('frame-dulceria-1')
+        document.getElementById('frame-' + id + '-0'),
+        document.getElementById('frame-' + id + '-1')
       ];
       var dots = [
-        document.getElementById('dot-dulceria-0'),
-        document.getElementById('dot-dulceria-1')
+        document.getElementById('dot-' + id + '-0'),
+        document.getElementById('dot-' + id + '-1')
       ];
       var current = 0;
       function next() {
@@ -387,8 +422,11 @@
         frames[current].style.opacity = '1';
         dots[current].style.opacity = '1';
       }
-      setInterval(next, 2500);
-    })();
+      setInterval(next, interval);
+    }
+    makeSlider('dulceria', 2500);
+    makeSlider('soda',     3200);
+    makeSlider('gourmet',  3800);
   </script>
 
 </body>
